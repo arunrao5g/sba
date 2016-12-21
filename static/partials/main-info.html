@@ -1,0 +1,10 @@
+<!--<div ng-if="details.data.meta.message === 'OK'">
+    {{details.data.meta.html}}
+</div> -->
+<div class='container-fluid' ng-bind-html='report_tag'>
+    <!--{{details.data.meta.html}}-->
+</div>
+
+<div ng-if="details.data.meta.message === 'NODATA'">
+    No results found.
+</div>

@@ -5,17 +5,18 @@ from restserv_v1.core import searchAnalytics
 from restserv_v1.dashboard import listDashboards, createDashboards, saveChart
 
 
-ALLOWED_ORIGINS = ['http://127.0.0.1:8000'] # Or load this from a config file
+ALLOWED_ORIGINS = ['http://127.0.0.1:8001']  # Or load this from a config file
+
 
 class CorsMiddleware(object):
 
-    def process_request(self, request, response):
+    def process_request(self, response):
         response.set_header('Access-Control-Allow-Origin', '*')
         response.set_header('Access-Control-Allow-Headers', 'Content-Type,Authorization')
         response.set_header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE')
 
 
-app = falcon.API(middleware=[CorsMiddleware()]);
+app = falcon.API(middleware=[CorsMiddleware()])
 
 # Register API view
 searchanalytics = searchAnalytics()
@@ -31,10 +32,10 @@ app.add_route('/savechart', savechart)
 
 if __name__ == '__main__':
     host = "127.0.0.1"
-    port = 8000
+    port = 8001
     httpd = simple_server.make_server(host, port, app)
     try:
-        webbrowser.open('http://localhost:63342/SearchBasedAnalytics/static/index.html')
+        webbrowser.open('http://localhost:63342/sba/static/index.html')
         print("Serving on %s:%s" % (host, port))
         httpd.serve_forever()
     except Exception as e:

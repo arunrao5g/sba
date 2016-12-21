@@ -1,6 +1,6 @@
 import json
 import falcon
-from database.db_core import SearchMain
+from database.db_core import Search
 
 
 def crossdomain(req, resp):
@@ -20,7 +20,10 @@ class searchAnalytics(object):
             searchQuery = data.get('searchQuery')
             chartType = data.get('chartType')
             groupClass = data.get('groupClass')
-            result = SearchMain.get_chart(searchQuery, chartType, groupClass)
+            print searchQuery, chartType, groupClass
+
+            result = Search(searchQuery, chartType, groupClass)
+
             resp.body = json.dumps(result)
             # resp.content_type = "application/json"
         except Exception as e:
@@ -29,8 +32,6 @@ class searchAnalytics(object):
                     "html": "",
                     "lang": "en",
                     "report":"",
-                    "kpi":"",
-                    "kpi_name":"",
                     "etag": "timestamp",
                     "message": "OK"
                     # ToDo Append ETAG (r&d req)
