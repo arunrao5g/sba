@@ -16,8 +16,8 @@ class Search(object):
         self.tag, self.query_string, self.table_cur = "", "", ""
         self.result_dict = dict()
         self.metric_count, self.dimension_count = 0, 0
-        self.group_by_query, self.order_by_query, self.tab_query, \
-        self.col_query, self.filter_query, self.join_query = "", "", "", "", "", ""
+        self.group_by_query, self.order_by_query, self.tab_query = "", "", ""
+        self.col_query, self.filter_query, self.join_query = "", "", ""
 
     @staticmethod
     def generate_query_object(p_query):
@@ -87,19 +87,17 @@ class Search(object):
         for joins in join_set:
             self.join_query = self.join_query + joins + " and "
 
-        filter_query = ""
         filter_set = set([f["class"] + " = " + f["filter_value"] for f in self.d_filters.values()])
         for filters in filter_set:
             self.filter_query = self.filter_query + filters + " and "
-
 
         group_by_list = set([d["class"] for d in self.d_dimension.values()])
         for gb_columns in group_by_list:
             self.group_by_query = gb_columns + ", " + self.group_by_query
             if gb_columns in ('d_calendar_date.week_name', 'd_calendar_date.month_name',
-                              'd_calendar_date.quarter_name','d_calendar_date.year_name'):
-                self.group_by_query = gb_columns.replace("_name","_id") + ", " + self.group_by_query
-                self.order_by_query = gb_columns.replace("_name","_id") + ", " + self.order_by_query
+                              'd_calendar_date.quarter_name', 'd_calendar_date.year_name'):
+                self.group_by_query = gb_columns.replace("_name", "_id") + ", " + self.group_by_query
+                self.order_by_query = gb_columns.replace("_name", "_id") + ", " + self.order_by_query
 
         self.query_string = "select " + self.col_query.rstrip(", ") + " from " + self.tab_query.rstrip(", ")
         if len(join_set) > 0:
@@ -146,7 +144,7 @@ class Search(object):
         if self.metric_count == 1 and self.dimension_count == 0:
             try:
 
-                metric_name = re.sub("([a-z])([A-Z])","\g<1> \g<2>", [i[0] for i in self.table_cur.description][0])
+                metric_name = re.sub("([a-z])([A-Z])", "\g<1> \g<2>", [i[0] for i in self.table_cur.description][0])
                 if self.d_metric[metric_name.lower()]["prefix"] is not None:
                     prefix = self.d_metric[metric_name.lower()]["prefix"]
                     print prefix
@@ -160,8 +158,9 @@ class Search(object):
                 return ""
         elif self.metric_count == 1 and self.dimension_count == 1:
             try:
-                dimension =  self.d_dimension.keys()[0]
-                if self.d_dimension[dimension]["time_series"] != "Y" and self.d_dimension[dimension]["drill_down"] is None:
+                dimension = self.d_dimension.keys()[0]
+                if self.d_dimension[dimension]["time_series"] != "Y" \
+                        and self.d_dimension[dimension]["drill_down"] is None:
                     y_axis_name = self.d_metric.keys()[0]
                     if self.d_metric[y_axis_name]["prefix"] is not None:
                         prefix = self.d_metric[y_axis_name]["prefix"]
@@ -170,15 +169,16 @@ class Search(object):
                     for cur in self.table_cur:
                         j = 0
                         for i in field_names:
-                            if str(i).replace(" ","").lower() == dimension.replace(" ","").lower():
-                                name = "name: '"+ str(cur[j]) + "'"
-                            elif str(i).replace(" ","").lower() == y_axis_name.replace(" ","").lower():
+                            if str(i).replace(" ", "").lower() == dimension.replace(" ", "").lower():
+                                name = "name: '" + str(cur[j]) + "'"
+                            elif str(i).replace(" ", "").lower() == y_axis_name.replace(" ", "").lower():
                                 y = "y: " + str(cur[j])
                             j += + 1
                         chart_data = chart_data + "{" + y + ", " + name + "},"
                     chart_data = chart_data.rstrip(",") + "]"
                     return Static.get_pie_chart(chart_data, y_axis_name.title(), dimension.title(), prefix)
-                elif self.d_dimension[dimension]["time_series"] == "Y" and self.d_dimension[dimension]["drill_down"] is None:
+                elif self.d_dimension[dimension]["time_series"] == "Y" \
+                        and self.d_dimension[dimension]["drill_down"] is None:
                     y_axis_name = self.d_metric.keys()[0]
                     if self.d_metric[y_axis_name]["prefix"] is not None:
                         prefix = self.d_metric[y_axis_name]["prefix"]
@@ -187,22 +187,23 @@ class Search(object):
                     for cur in self.table_cur:
                         j = 0
                         for i in field_names:
-                            if str(i).replace(" ","").lower() == dimension.replace(" ","").lower():
+                            if str(i).replace(" ", "").lower() == dimension.replace(" ", "").lower():
                                 category = category + "'" + str(cur[j]) + "'" + ","
-                            elif str(i).replace(" ","").lower() == y_axis_name.replace(" ","").lower():
+                            elif str(i).replace(" ", "").lower() == y_axis_name.replace(" ", "").lower():
                                 data = data + str(cur[j]) + ","
                             j += + 1
                     category = category.rstrip(",")
                     data = data.rstrip(",")
                     return Static.get_column_chart(data, category, prefix)
-                elif self.d_dimension[dimension]["time_series"] != "Y" and self.d_dimension[dimension]["drill_down"] is not None:
+                elif self.d_dimension[dimension]["time_series"] != "Y" \
+                        and self.d_dimension[dimension]["drill_down"] is not None:
                     drill_array = self.d_dimension[dimension]["drill_down"].split(",")
                     drill_col = drill_array.pop()
                     drill_join = drill_array.pop()
                     drill_tab = drill_array.pop()
-                    drill_query = "select "+ self.col_query + drill_col+ " from " + self.tab_query.rstrip(", ")\
-                          + ", " + drill_tab + " where " + self.join_query + drill_join + " group by " \
-                          + self.group_by_query + drill_col
+                    drill_query = "select " + self.col_query + drill_col + " from " + self.tab_query.rstrip(", ") \
+                                  + ", " + drill_tab + " where " + self.join_query + drill_join + " group by " \
+                                  + self.group_by_query + drill_col
                     y_axis_name = self.d_metric.keys()[0]
                     if self.d_metric[y_axis_name]["prefix"] is not None:
                         prefix = self.d_metric[y_axis_name]["prefix"]
@@ -211,10 +212,10 @@ class Search(object):
                     for cur in self.table_cur:
                         j = 0
                         for i in field_names:
-                            if str(i).replace(" ","").lower() == dimension.replace(" ","").lower():
-                                name = "name: '"+ str(cur[j]) + "'"
-                                drill_down = "drilldown: '"+ str(cur[j]) + "'"
-                            elif str(i).replace(" ","").lower() == y_axis_name.replace(" ","").lower():
+                            if str(i).replace(" ", "").lower() == dimension.replace(" ", "").lower():
+                                name = "name: '" + str(cur[j]) + "'"
+                                drill_down = "drilldown: '" + str(cur[j]) + "'"
+                            elif str(i).replace(" ", "").lower() == y_axis_name.replace(" ", "").lower():
                                 y = "y: " + str(cur[j])
                             j += + 1
                         chart_data = chart_data + "{" + y + ", " + name + ", " + drill_down + "},"
@@ -227,9 +228,9 @@ class Search(object):
                     for rec in drill_cur:
                         j = 0
                         for i in d_field_names:
-                            if str(i).replace(" ","").lower() == dimension.replace(" ","").lower():
+                            if str(i).replace(" ", "").lower() == dimension.replace(" ", "").lower():
                                 name = str(rec[j])
-                            elif str(i).replace(" ","").lower() == y_axis_name.replace(" ","").lower():
+                            elif str(i).replace(" ", "").lower() == y_axis_name.replace(" ", "").lower():
                                 value = str(rec[j])
                                 temp_drill_dict[name].append(value)
                             else:
@@ -246,11 +247,11 @@ class Search(object):
                         sd_list = list(series_data.rstrip(",").split(","))
                         sv_list = list(series_value.rstrip(",").split(","))
                         data = "data:["
-                        for a in range(0,len(sd_list)):
-                            data = data + "["+ sd_list[a] + "," + sv_list[a] + "],"
-                        series = series + "{name:'"+keys + "', id:'"+ keys+"', "+ data.rstrip(",") + "]},"
+                        for a in range(0, len(sd_list)):
+                            data = data + "[" + sd_list[a] + "," + sv_list[a] + "],"
+                        series = series + "{name:'" + keys + "', id:'" + keys + "', " + data.rstrip(",") + "]},"
                     series = series.rstrip(",") + "]"
-                    return Static.get_drill_down_chart(chart_data, series, dimension.title(), y_axis_name.title())
+                    return Static.get_drill_down_chart(chart_data, series, dimension.title(), y_axis_name.title(), prefix)
                 else:
                     return ""
             except Exception as e:
@@ -273,6 +274,8 @@ class Search(object):
         if chart_body != "":
             self.tag = container_st_tag + chart_header + chart_body + container_ed_tag
 
+        print self.tag
+
         self.result_dict["meta"] = {
             "html_tag": self.tag,
             "lang": "en",
@@ -280,8 +283,3 @@ class Search(object):
             "message": "OK"
         }
         return self.result_dict
-
-
-# ToDo Delete below line
-#result = Search('Total Sales by owner', 'graph', 'sales')
-#print result.get_chart()

@@ -172,7 +172,7 @@ class Static:
                 "</script></div>"
 
     @staticmethod
-    def get_drill_down_chart(chart_data, series, series_name, y_axis_name):
+    def get_drill_down_chart(chart_data, series, series_name, y_axis_name, prefix):
         return "<div class='div-continer' style='height:400px;' id='chartContainer'>"\
                 "<script>"\
                 "$(function () {  $(document).ready(function () {" \
@@ -187,7 +187,7 @@ class Static:
                     "title: { style: { display: 'none'}},"\
                     "tooltip: {"\
 			            "headerFormat: '<span style=\"font-size:11px\">{series.name}</span><br>',"\
-                        "pointFormat: '<span style=\"color:{point.color}\">{point.name}</span> "+y_axis_name+": <b>{point.y}</b><br/>'"\
+                        "pointFormat: '<span style=\"color:{point.color}\">{point.name}</span> "+y_axis_name+": <b>"+prefix+" {point.y}</b><br/>'"\
                     "},"\
                     "xAxis: {"\
                         "type: 'category'" \
