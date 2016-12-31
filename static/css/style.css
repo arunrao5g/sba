@@ -1,0 +1,110 @@
+.user {
+    margin-left: 10px;
+    font-size:15px;
+    padding:2px;
+    color: #FFFFFF;
+}
+.img-circle {
+    border-radius: 50%;
+    height: 26px;
+    width: 26px;
+    }
+
+.jumbotron {
+    font-family: "Lucida Grande", "Lucida Sans Unicode", Arial, Helvetica, sans-serif;
+    bopacity: 1;
+    background:#00ACDE;
+}
+.report_table {
+    color: #000000;
+    font-family: calibri;
+    font-size: 15px;
+    font-weight: 300;
+    text-align: left;
+    line-height: 30px;
+    border-spacing: 0;
+    border: box-border;
+    margin: 1px auto;
+    width: 100%;
+}
+thead tr:first-child {
+    color: #000000;
+    border: none;
+}
+th {
+    font-weight: bold;
+    padding: 0px 15px 0px 20px;
+}
+th:first-child, td:first-child {
+    padding: 0 15px 0 20px;
+}
+thead tr:last-child th {
+    border-bottom: 2px solid #f96868;
+}
+tbody tr:hover {
+    background-color: #ffeeff;
+}
+tbody tr:last-child td {
+    border: none;
+}
+tbody td {
+    border-bottom: 1px solid #ddd;
+    padding: 0px 15px 0px 20px;
+}
+td:last-child {
+    text-align: left;
+}
+.div-header {
+    font-size: 15px;
+    font-family: "Lucida Grande", "Lucida Sans Unicode", Arial, Helvetica, sans-serif;
+    padding: 15px;
+    box-shadow: 1px 1px 3px #888888;
+    background-color: #F8F8F8;
+    height:48px;
+}
+.chart-edit:after {
+    content: '\2807';
+    font-size: 20px;
+    overflow: hidden;
+    width: 10px;
+    float: right;
+}
+
+.chart-edit:hover {
+    color: #B9B9B9;
+    cursor: pointer;
+}
+.chart-title {
+    background: transparent;
+    border: 0;
+    font-size: 14px;
+    height: 100%;
+    margin: 0;
+    line-height: 18px;
+    min-height: 18px;
+    outline: none;
+    padding: 0;
+    position: absolute;
+    resize: none;
+    width: 100%;
+    cursor: default;
+}
+
+.chart-title-edit {
+    color: grey;
+}
+.dropdown-menu>li>a:hover {
+    cursor: pointer;
+}
+.highcharts-container {
+    box-shadow: 1px 1px 3px #888888;
+}
+.kpi_box {
+    font-family: "Lucida Grande", "Lucida Sans Unicode", Arial,Helvetica, sans-serif;
+    color: #FFFFFF;
+    padding: 35px;
+    height: 150;
+    background-color: #D95B90;
+    font-size: 30px;
+    box-shadow: 2px 2px 5px #888888;
+}

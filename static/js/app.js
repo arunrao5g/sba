@@ -7,6 +7,7 @@ angular.module('myApp', [])
     });
 
     function fetch(){
+      if($(search_concept).text() != 'Source'){
       $http.post("http://127.0.0.1:8001/searchanalytics", {
                 searchQuery : $scope.search,
                 chartType : 'graph',
@@ -18,6 +19,7 @@ angular.module('myApp', [])
             $scope.chart_tag = $sce.trustAsHtml(response.data.meta.html_tag);
           }
        );
+       }
     }
 
     $scope.select = function(){
