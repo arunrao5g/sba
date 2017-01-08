@@ -10,7 +10,7 @@ ALLOWED_ORIGINS = ['http://127.0.0.1:8001']  # Or load this from a config file
 
 class CorsMiddleware(object):
 
-    def process_request(self, response):
+    def process_request(self, request, response):
         response.set_header('Access-Control-Allow-Origin', '*')
         response.set_header('Access-Control-Allow-Headers', 'Content-Type,Authorization')
         response.set_header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE')
