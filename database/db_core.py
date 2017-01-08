@@ -274,8 +274,6 @@ class Search(object):
         if chart_body != "":
             self.tag = container_st_tag + chart_header + chart_body + container_ed_tag
 
-        print self.tag
-
         self.result_dict["meta"] = {
             "html_tag": self.tag,
             "lang": "en",
@@ -283,3 +281,6 @@ class Search(object):
             "message": "OK"
         }
         return self.result_dict
+
+# result = Search('Total Sales', 'graph', 'sales')
+# print result.get_chart()
